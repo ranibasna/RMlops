@@ -1,4 +1,4 @@
 data_extraction:
-  first_date : "2019-01-01"
+  first_date : "2018-01-01"
   output_path : data
   output_filename_data : StockData.RData
