@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04 
+    runs-on: ubuntu-20.04 # (ubuntu-latest)
     container: 
      image: asachet/rocker-tidymodels
     
@@ -31,7 +31,7 @@ jobs:
       - name: Retrain Model
       #  env:
       #    NEPTUNE_API_TOKEN: ${{ secrets.API_KEY }}
-        run: Rscript src/model_train.R
+        run: Rscript Rcode/model_train.R
       
       # Add new files in data folder, commit along with other modified files, push
       - name: Commit files
