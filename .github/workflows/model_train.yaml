@@ -8,8 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04 # (ubuntu-latest)
-    container: 
-     image: asachet/rocker-tidymodels
+    # container: 
+    #  image: asachet/rocker-tidymodels
     
     steps:
       - name: Checkout
