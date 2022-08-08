@@ -1,12 +1,12 @@
 data_extraction:
-  first_date : 2018-01-01
+  first_date : 2007-01-01
   output_path : data
   output_filename_data : StockData.RData
 
 train:
   input_data: data/StockData.RData
   initial: 600 
-  assess: 64
+  assess: 50
   model_mode: regression
   n_trees: 200
   model_engin: xgboost

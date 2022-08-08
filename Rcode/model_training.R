@@ -19,13 +19,14 @@ grid_size = train_data_info$grid_size
 stock_data = readRDS(input)
 # neptune_api_key = Sys.getenv('api_key')
 
-
 # data spliting with rolling origin (as opposed to cross validation) using rsample package
 rolling_df <- rsample::rolling_origin(stock_data, initial = initial, assess = assess, cumulative = FALSE, skip = 0)
 
+
+
 #
 # XGBoost model specification
-xgboost_model <- 
+xgboost_model <-
   parsnip::boost_tree(
     mode = model_mode,
     trees = n_trees,
@@ -36,7 +37,7 @@ xgboost_model <-
   ) %>% set_engine(model_engin, objective = "reg:squarederror")
 
 # grid specification
-xgboost_params <- 
+xgboost_params <-
   dials::parameters(
     min_n(),
     tree_depth(),
@@ -44,16 +45,16 @@ xgboost_params <-
     loss_reduction()
   )
 #
-xgboost_grid <- 
+xgboost_grid <-
   dials::grid_max_entropy(
-    xgboost_params, 
+    xgboost_params,
     size = grid_size
   )
 
 # set workflow
-xgboost_wf <- 
+xgboost_wf <-
   workflows::workflow() %>%
-  add_model(xgboost_model) %>% 
+  add_model(xgboost_model) %>%
   add_formula(weekly.returns ~ .)
 
 
@@ -71,7 +72,7 @@ xgboost_best_params <- xgboost_tuned %>% tune::select_best("rmse")
 xgboost_model_best <- xgboost_model %>%  finalize_model(xgboost_best_params)
 
 # split into training and testing datasets. Stratify by weekly return
-data_splits <- mystock_final_data_laged %>%  timetk::time_series_split(initial = initial, assess = assess)
+data_splits <- stock_data %>%  timetk::time_series_split(initial = dim(stock_data)[1] - 60, assess = 60)
 
 training_df <- training(data_split)
 test_df <- testing(data_split)
@@ -79,7 +80,7 @@ test_df <- testing(data_split)
 test_prediction <- xgboost_model_best %>%
   # fit the model on all the training data
   fit(
-    formula = weekly.returns ~ ., 
+    formula = weekly.returns ~ .,
     data    = training_df
   ) %>%
   # use the training model fit to predict the test data
