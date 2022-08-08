@@ -1,4 +1,5 @@
-libs = c('yaml', 'dplyr', 'timetk', 'lubridate','xgboost','tidymodels', 'modeltime', 'reticulate','neptune','tidyquant')
+# libs = c('yaml', 'dplyr', 'timetk', 'lubridate','xgboost','tidymodels', 'modeltime', 'reticulate','neptune','tidyquant')
+libs = c('yaml', 'dplyr', 'timetk', 'lubridate','xgboost','tidymodels','tidyquant')
 
 sapply(libs[!libs %in% installed.packages()], install.packages)
 sapply(libs, require, character.only = T)
@@ -16,7 +17,7 @@ grid_size = train_data_info$grid_size
 
 # Read Data
 stock_data = readRDS(input)
-neptune_api_key = Sys.getenv('api_key')
+# neptune_api_key = Sys.getenv('api_key')
 
 
 # data spliting with rolling origin (as opposed to cross validation) using rsample package
