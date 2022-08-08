@@ -2,3 +2,33 @@ data_extraction:
   first_date : 2018-01-01
   output_path : data
   output_filename_data : StockData.RData
+
+train:
+  input_data: data/StockData.RData
+  initial: 600 
+  assess: 64
+  model_mode: regression
+  n_trees: 200
+  model_engin: xgboost
+  grid_size: 20
+
+
+# 
+# train:
+#   resampling : 1 months
+#   input : data/raw.RData
+#   output_path: model
+#   output_filename : model.RData
+#   prediction_mode : regression
+#   allow_parallel : True
+#   parallel_cores : 4
+#   models : 
+#     boost_tree :
+#       parameters :
+#         learn_rate : 0.001,0.01,0.1,0.3,0.5,0.9
+#       engine : xgboost
+#   neptune :
+#     envname : neptune
+#     project : Spain-Electricity-Forecast
+#   model_output: outputs/model.RData
+#   best_model_output: outputs/best_model.RData

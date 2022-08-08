@@ -1,0 +1,46 @@
+name: retrain_model
+
+on:
+  repository_dispatch:
+    types: retrain_model
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04 
+    container: 
+     image: asachet/rocker-tidymodels
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      # - name: Install R
+      #   uses: r-lib/actions/setup-r@v2 # Instalo R
+      #   with: 
+      #     r-version: '4.1.1'
+      # 
+      # - name: Create and populate .Renviron file
+      #   run: |
+      #     echo TOKEN="$secrets.TOKEN" >> ~/.Renviron
+      #     echo api_key="$secrets.API_KEY" >> ~/.Renviron
+      # 
+      # - name: Setup Neptune
+      #   run: Rscript src/neptune_setup.R
+        
+      - name: Retrain Model
+      #  env:
+      #    NEPTUNE_API_TOKEN: ${{ secrets.API_KEY }}
+        run: Rscript src/model_train.R
+      
+      # Add new files in data folder, commit along with other modified files, push
+      - name: Commit files
+        run: |
+          git config --local user.name actions-user
+          git config --local user.email "actions@github.com"
+          git add data/*
+          git commit -am "GH ACTION Headlines $(date)"
+          git push origin master
+        env:
+          REPO_KEY: ${{secrets.GITHUB_TOKEN}}
+          username: github-actions
