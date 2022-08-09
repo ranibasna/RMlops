@@ -14,6 +14,7 @@ model_mode = train_data_info$model_mode
 n_trees = train_data_info$n_trees
 model_engin = train_data_info$model_engin
 grid_size = train_data_info$grid_size
+best_model_output = train_data_info$best_model_output
 
 # Read Data
 stock_data = readRDS(input)
