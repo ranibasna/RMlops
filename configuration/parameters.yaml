@@ -12,6 +12,12 @@ train:
   model_engin: xgboost
   grid_size: 20
   best_model_output: outputs/best_model.RData
+  training_data_output: outputs/training_data.RData
+  
+predict:
+  model_path: outputs/best_model.RData
+  training_data_path: outputs/training_data.RData
+  n_trees: 200
 
 
 # 

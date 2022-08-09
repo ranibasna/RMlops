@@ -15,6 +15,7 @@ n_trees = train_data_info$n_trees
 model_engin = train_data_info$model_engin
 grid_size = train_data_info$grid_size
 best_model_output = train_data_info$best_model_output
+training_data_output = train_data_info$training_data_output
 
 # Read Data
 stock_data = readRDS(input)
@@ -72,7 +73,7 @@ xgboost_tuned <- tune::tune_grid(
 xgboost_best_params <- xgboost_tuned %>% tune::select_best("rmse")
 xgboost_model_best <- xgboost_model %>%  finalize_model(xgboost_best_params)
 
-# split into training and testing datasets. Stratify by weekly return
+# split into training and testing data sets. stratify by weekly return
 data_split <- stock_data %>%  timetk::time_series_split(initial = dim(stock_data)[1] - 60, assess = 60)
 
 training_df <- training(data_split)
@@ -91,6 +92,8 @@ test_prediction <- xgboost_model_best %>%
 # measure the accuracy of our model using `yardstick`
 xgboost_score <- test_prediction %>% yardstick::metrics(weekly.returns, .pred) %>% mutate(.estimate = format(round(.estimate, 2), big.mark = ","))
 
+# save training data
+saveRDS(training_df, training_data_output)
 # Save best model
 saveRDS(xgboost_model_best, best_model_output)
 
