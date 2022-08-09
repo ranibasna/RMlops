@@ -72,7 +72,7 @@ xgboost_best_params <- xgboost_tuned %>% tune::select_best("rmse")
 xgboost_model_best <- xgboost_model %>%  finalize_model(xgboost_best_params)
 
 # split into training and testing datasets. Stratify by weekly return
-data_splits <- stock_data %>%  timetk::time_series_split(initial = dim(stock_data)[1] - 60, assess = 60)
+data_split <- stock_data %>%  timetk::time_series_split(initial = dim(stock_data)[1] - 60, assess = 60)
 
 training_df <- training(data_split)
 test_df <- testing(data_split)
