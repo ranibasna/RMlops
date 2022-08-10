@@ -1,4 +1,4 @@
-libs = c('yaml', 'tidyverse','tidymodels','tidyquant')
+libs = c('yaml', 'tidyverse','tidymodels','tidyquant','xgboost')
 
 sapply(libs[!libs %in% installed.packages()], install.packages)
 sapply(libs, require, character.only = T)
@@ -7,14 +7,13 @@ sapply(libs, require, character.only = T)
 # Load Variables
 predict_data_info =  read_yaml('configuration/parameters.yaml')[['predict']]
 model_path = predict_data_info$model_path
-training_data_path = predict_data_info$training_data_path
-n_trees = predict_data_info$n_trees
+
+
 
 #* @apiTitle stock prediction for the next week Apple stock direction
 #* Charting Apple stock 
 #* @get /plot
 #* @serializer contentType list(type='image/png')
-
 
 function(){
   AAPL <- tq_get("AAPL", from = Sys.Date() - 1300, to = Sys.Date())
@@ -26,9 +25,8 @@ function(){
   readBin(file, "raw", n = file.info(file)$size)
 }
 
-
 #* Returns most recent week apple stock direction
-#* @get /AppleSharePriice
+#* @get /AppleSharePrice
 
 function(){
   # get the data on daily basis
@@ -50,13 +48,9 @@ function(){
   
   # Load model
   xgboost_model_final = readRDS(model_path)
-  # load training data for the model
-  training_df = readRDS(training_data_path)
   
   # predictions
-  predictions = xgboost_model_final %>% fit(formula = weekly.returns ~ ., data    = training_df) %>% 
-                predict(new_data = new_data_input_laged)
-  # results
+  predictions = xgboost_model_final  %>%  predict(new_data = new_data_input_laged)
   result <- list(predictions, new_data_input_laged$date_lead)
   return(result)
 }

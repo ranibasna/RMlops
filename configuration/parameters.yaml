@@ -16,8 +16,6 @@ train:
   
 predict:
   model_path: outputs/best_model.RData
-  training_data_path: outputs/training_data.RData
-  n_trees: 200
 
 
 # 

@@ -92,9 +92,9 @@ test_prediction <- xgboost_model_best %>%
 # measure the accuracy of our model using `yardstick`
 xgboost_score <- test_prediction %>% yardstick::metrics(weekly.returns, .pred) %>% mutate(.estimate = format(round(.estimate, 2), big.mark = ","))
 
-# save training data
-saveRDS(training_df, training_data_output)
-# Save best model
+
+# Save the fitted version of the best model
+xgboost_model_best <- xgboost_model_best %>% fit(formula = weekly.returns ~ ., data    = training_df)
 saveRDS(xgboost_model_best, best_model_output)
 
 
