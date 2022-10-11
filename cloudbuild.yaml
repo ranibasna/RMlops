@@ -1,0 +1,7 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/RMLOps/github.com/https://github.com/ranibasna/RMlops:$SHORT_SHA', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/RMLOps/github.com/https://github.com/ranibasna/RMlops:$SHORT_SHA']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['beta', 'run', 'deploy', 'RMLOps', '--image=gcr.io/RMLOps/github.com/https://github.com/ranibasna/RMlops:$SHORT_SHA', '--region=europe-west1', '--platform=managed']
